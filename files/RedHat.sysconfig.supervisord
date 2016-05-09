@@ -1,0 +1,8 @@
+set -a 
+
+OPTIONS="-c /etc/supervisord.conf"
+PIDFILE=/var/run/supervisord.pid
+
+WAIT_FOR_SUBPROCESSES=yes
+
+ulimit -n 96000

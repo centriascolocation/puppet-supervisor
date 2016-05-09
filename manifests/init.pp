@@ -20,6 +20,12 @@ class supervisor (
       if $::operatingsystem == 'Amazon' {
         $pkg_setuptools = 'python26-pip'
         $path_config    = '/etc'
+        file { '/etc/sysconfig/supervisord':
+          source => "puppet:///modules/supervisor/${::osfamily}.sysconfig.supervisord",
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0755',
+        }
       }
       else {
         $pkg_setuptools = 'python-pip'
@@ -42,10 +48,11 @@ class supervisor (
 
   # install start/stop script
   file { '/etc/init.d/supervisord':
-    source => "puppet:///modules/supervisor/${::osfamily}.supervisord",
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
+    source  => "puppet:///modules/supervisor/${::osfamily}.supervisord",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/etc/sysconfig/supervisord'], 
   }
 
   file { '/var/log/supervisor':
